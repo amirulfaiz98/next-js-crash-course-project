@@ -81,6 +81,10 @@ export default function FilteredEventPage(props) {
 
   return (
     <Fragment>
+      <Head>
+        <title>All Events</title>
+        <meta name="description" content={`All events for ${numMonth}/${numYear}`}/>
+      </Head>
       <ResultsTitle date={date} />
       <EventList items={filteredEvents} />
     </Fragment>
