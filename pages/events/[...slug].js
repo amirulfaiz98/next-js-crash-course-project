@@ -34,26 +34,21 @@ export default function FilteredEventPage(props) {
     }
   }, [data]);
 
-  if (!filterData) {
-    return <p className="center">Loading...</p>;
-  }
+  let pageHeadData = (
+    <Head>
+      <title>All Events</title>
+      <meta
+        name="description"
+        content={`List of filtered events`}
+      />
+    </Head>
+  );
 
-  if (
-    isNaN(numYear) ||
-    isNaN(numMonth) ||
-    numYear > 2030 ||
-    numYear < 2021 ||
-    numMonth < 1 ||
-    numMonth > 12 || error
-  ) {
+  if (!loadedEvents) {
     return (
       <Fragment>
-        <ErrorAlert>
-          <p>Invalid filter. Please adjust your values!</p>
-        </ErrorAlert>
-        <div className="center">
-          <Button link="/events">Show All Events</Button>
-        </div>
+        {pageHeadData}
+        <p className="center">Loading...</p>
       </Fragment>
     );
   }
@@ -63,6 +58,38 @@ export default function FilteredEventPage(props) {
 
   const numYear = +filteredYear;
   const numMonth = +filteredMonth;
+
+  pageHeadData = (
+    <Head>
+      <title>All Events</title>
+      <meta
+        name="description"
+        content={`All events for ${numMonth}/${numYear}`}
+      />
+    </Head>
+  );
+
+  if (
+    isNaN(numYear) ||
+    isNaN(numMonth) ||
+    numYear > 2030 ||
+    numYear < 2021 ||
+    numMonth < 1 ||
+    numMonth > 12 ||
+    error
+  ) {
+    return (
+      <Fragment>
+        {pageHeadData}
+        <ErrorAlert>
+          <p>Invalid filter. Please adjust your values!</p>
+        </ErrorAlert>
+        <div className="center">
+          <Button link="/events">Show All Events</Button>
+        </div>
+      </Fragment>
+    );
+  }
 
   const filteredEvents = allEvents.filter((event) => {
     const eventDate = new Date(event.date);
@@ -81,10 +108,7 @@ export default function FilteredEventPage(props) {
 
   return (
     <Fragment>
-      <Head>
-        <title>All Events</title>
-        <meta name="description" content={`All events for ${numMonth}/${numYear}`}/>
-      </Head>
+      {pageHeadData}
       <ResultsTitle date={date} />
       <EventList items={filteredEvents} />
     </Fragment>
